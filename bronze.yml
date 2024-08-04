@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: A sample CloudFormation template using AMI ID as a parameter.
+
+Parameters:
+  AMIId:
+    Type: String
+    Description: The ID of the Amazon Machine Image (AMI) to be used for the instance.
+    Default: ami-12345678  # Replace with a default AMI ID or remove this line if not needed.
+
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: !Ref AMIId
+      KeyName: my-key-pair # Replace with your key pair name.
+      Tags:
+        - Key: Name
+          Value: MyEC2Instance
+
+Outputs:
+  InstanceId:
+    Description: The ID of the created EC2 instance.
+    Value: !Ref MyEC2Instance
