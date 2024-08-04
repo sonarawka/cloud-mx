@@ -6,6 +6,7 @@ Parameters:
     Type: String
     Description: Name of the environment (e.g., dev, test, prod).
     Default: dev
+    bz05-mx01
 
   InstanceType:
     Type: String
@@ -34,7 +35,7 @@ Parameters:
   DBAllocatedStorage:
     Type: Number
     Description: The allocated storage size for the RDS instance (in GB).
-    Default: 20
+    Default: 2520
 
   DBName:
     Type: String
