@@ -5,7 +5,7 @@ Parameters:
   AMIId:
     Type: String
     Description: The ID of the Amazon Machine Image (AMI) to be used for the instance.
-    Default: ami-12345678  # Replace with a default AMI ID or remove this line if not needed.
+    Default: ami-94794133  # Replace with a default AMI ID or remove this line if not needed.
 
 Resources:
   MyEC2Instance:
