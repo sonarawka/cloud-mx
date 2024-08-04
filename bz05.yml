@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for a Bronze stack with configurable parameters.
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Description: Name of the environment (e.g., dev, test, prod).
+    Default: dev
+
+  InstanceType:
+    Type: String
+    Description: EC2 instance type.
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+
+  DBInstanceType:
+    Type: String
+    Description: RDS instance type.
+    Default: db.t2.micro
+    AllowedValues:
+      - db.t2.micro
+      - db.t2.small
+      - db.t2.medium
+      - db.t3.micro
+      - db.t3.small
+      - db.t3.medium
+
+  DBAllocatedStorage:
+    Type: Number
+    Description: The allocated storage size for the RDS instance (in GB).
+    Default: 20
+
+  DBName:
+    Type: String
+    Description: The name of the RDS database.
+    Default: mydatabase
+
+  DBUsername:
+    Type: String
+    Description: The master username for the RDS database.
+    NoEcho: true
+
+  DBPassword:
+    Type: String
+    Description: The master password for the RDS database.
+    NoEcho: true
+
+Resources:
+  MyRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: !Ref DBInstanceType
+      AllocatedStorage: !Ref DBAllocatedStorage
+      Engine: mysql
+      EngineVersion: 8.0
+      DBName: !Ref DBName
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      PubliclyAccessible: false
+      BackupRetentionPeriod: 7
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-rds-instance"
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: ami-0c55b159cbfafe1f0  # Replace with the appropriate AMI ID for your region.
+      KeyName: my-key-pair  # Replace with your key pair name.
+      Tags:
+        - Key: Name
+          Value: !Sub "${EnvironmentName}-ec2-instance"
+
+Outputs:
+  RDSInstanceEndpoint:
+    Description: Endpoint address of the RDS instance.
+    Value: !GetAtt MyRDSInstance.Endpoint.Address
+
+  EC2InstanceId:
+    Description: ID of the created EC2 instance.
+    Value: !Ref MyEC2Instance
